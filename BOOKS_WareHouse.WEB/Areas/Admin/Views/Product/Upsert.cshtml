@@ -1,0 +1,114 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Upsert-Product";
+}
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-light">@(Model.Id==0?"Create":"Update") Product</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" asp-controller="Product" asp-action="Upsert" enctype="multipart/form-data">
+            <input asp-for="Id" hidden />
+            <div class="border p-3">
+                @*<div asp-validation-summary="All" class="text-danger"></div>*@
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="Title" class="p-0"></label>
+                    <input type="text" class="form-control border-0 shadow" asp-for="Title" />
+                    <span class="text-danger" asp-validation-for="Title"></span>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="Description" class="p-0"></label>
+                    <textarea class="form-control border-0 shadow" asp-for="Description"></textarea>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="ISBN" class="p-0"></label>
+                    <input type="text" class="form-control border-0 shadow" asp-for="ISBN" />
+                    <span class="text-danger" asp-validation-for="ISBN"></span>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="Author" class="p-0"></label>
+                    <input type="text" class="form-control border-0 shadow" asp-for="Author" />
+                    <span class="text-danger" asp-validation-for="Author"></span>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="ListPrice" class="p-0"></label>
+                    <input type="number" class="form-control border-0 shadow" asp-for="ListPrice" />
+                    <span class="text-danger" asp-validation-for="ListPrice"></span>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="Price" class="p-0"></label>
+                    <input type="number" class="form-control border-0 shadow" asp-for="Price" />
+                    <span class="text-danger" asp-validation-for="Price"></span>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="Price50" class="p-0"></label>
+                    <input type="number" class="form-control border-0 shadow" asp-for="Price50" />
+                    <span class="text-danger" asp-validation-for="Price50"></span>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="Price100" class="p-0"></label>
+                    <input type="number" class="form-control border-0 shadow" asp-for="Price100" />
+                    <span class="text-danger" asp-validation-for="Price100"></span>
+                </div>
+                @*Select Category list item*@
+                <div class="mb-3 row p-1">
+                    <label asp-for="CategoryId" class="p-0"></label>
+                    <select class="form-select border-0 shadow" asp-for="CategoryId" asp-items="@ViewData["CategoryList"] as IEnumerable<SelectListItem>">
+                        <option disabled selected>--Select Category--</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="CategoryId"></span>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="ImageUrl" class="p-0"></label>
+                    <input type="file" name="formFile" class="form-control" asp-for="ImageUrl" />
+                </div>
+
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        @if (Model.Id == 0)
+                        {
+                            <button type="submit" class="btn btn-primary form-control">Create</button>
+                        }
+                        else
+                        {
+                        <button type="submit" class="btn btn-primary form-control">Update</button>
+                        }
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a class="btn btn-secondary border form-control" asp-controller="Product" asp-action="Index">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons   lists media searchreplace table visualblocks wordcount checklist     pageembed    permanentpen ',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough  | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent ',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            
+        });
+    </script>
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+}
