@@ -1,8 +1,43 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<Product>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-dark">
+    <h1 class="card-title text-dark">BOOKS LIBRARY</h1>
+    <hr class="text-black"/>
+</div>
+<div class="row pb-3">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-3 col-sm-6">
+            <div class="row p-2">
+                <div class="col-12 p-1">
+                    <div class="card border-0 p-3 mb-2 shadow border-top border-5 rounded">
+                        <img src="@item.ImageUrl" class="card-img-top rounded" />
+                        <div class="card-body pb-0">
+                            <div class="pl-1">
+                                <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@item.Title</p>
+                                <p class="card-title text-warning text-center">by <b>@item.Author</b></p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-dark opacity-75 text-center mb-0">
+                                    List Price:
+                                    <span class="text-decoration-line-through">@item.ListPrice.ToString("c")</span>
+                                </p>
+                            </div>
+                            <div class="pl-1">
+                                <p class="text-dark opacity-75 text-center">
+                                    As low as:
+                                    <span>@item.Price100.ToString("c")</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary bg-gradient border-0 form-control">
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>

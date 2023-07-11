@@ -17,7 +17,7 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> products = _unitOfWork.Product.GetAll().ToList();
+            List<Product> products = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
             return View(products);
         }
 
@@ -44,6 +44,7 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
             else
             {
                 Product product = _unitOfWork.Product.Get(u => u.Id == id);
+                ViewData["CategoryList"] = CategoryList;
                 return View(product);
             }
         }
@@ -57,19 +58,38 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
                 if (formFile != null)
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
-                    string productPath = Path.Combine(wwwRootPath, @"image\product");
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
 
+                    //while updating
+                    if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        //delete to replace another 
+                        var oldImagePath = Path.Combine(wwwRootPath, product.ImageUrl.TrimStart('\\'));
+
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         formFile.CopyTo(fileStream);
                     }
 
-                    Product product1 = new Product();
-                    product1.ImageUrl = @"image\product\" + fileName;
+                    product.ImageUrl = @"\images\product\" + fileName;
                 }
-                _unitOfWork.Product.Add(product);
+
+                if (product.Id == 0)
+                {
+                    _unitOfWork.Product.Add(product);
+                    TempData["Success"] = "Product created successfully";
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(product);
+                    TempData["Success"] = "Product updated successfully";
+                }
                 _unitOfWork.Save();
-                TempData["Success"] = "New Product created successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -97,10 +117,27 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
+            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('\\'));
+
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
+
             _unitOfWork.Product.Remove(product);
             _unitOfWork.Save();
             TempData["Success"] = "Product deleted successfully";
             return RedirectToAction("Index");
         }
+
+        //#region API CALLS
+        //[HttpGet]
+        //public IActionResult GetAll()
+        //{
+        //    List<Product> products = _unitOfWork.Product.GetAll(icludeProperties: "Category").ToList();
+        //    return Json(new { data = products });
+        //}
+        //#endregion
     }
 }

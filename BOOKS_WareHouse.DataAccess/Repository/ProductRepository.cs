@@ -19,7 +19,25 @@ namespace BOOKS_WareHouse.DataAccess.Repository
 
         public void Update(Product product)
         {
-            _context.Products.Update(product);
+            var updateProduct=_context.Products.FirstOrDefault(x => x.Id == product.Id);
+
+            if (updateProduct != null)
+            {
+                updateProduct.Title = product.Title;
+                updateProduct.Description = product.Description;
+                updateProduct.Price = product.Price;
+                updateProduct.ISBN = product.ISBN;
+                updateProduct.Author = product.Author;
+                updateProduct.Price100 = product.Price100;
+                updateProduct.Price50 = product.Price50;
+                updateProduct.CategoryId = product.CategoryId;
+                updateProduct.ListPrice = product.ListPrice;
+
+                if(product.ImageUrl != null)
+                {
+                    updateProduct.ImageUrl = product.ImageUrl;
+                }
+            }
         }
     }
 }
