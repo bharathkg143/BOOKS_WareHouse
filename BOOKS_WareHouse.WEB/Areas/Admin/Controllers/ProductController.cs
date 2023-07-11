@@ -1,11 +1,15 @@
 ﻿using BOOKS_WareHouse.DataAccess.Repository.IRepository;
 using BOOKS_WareHouse.Models;
+using BOOKS_WareHouse.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Data;
 
 namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

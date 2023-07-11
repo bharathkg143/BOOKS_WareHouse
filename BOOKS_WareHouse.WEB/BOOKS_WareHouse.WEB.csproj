@@ -25,8 +25,4 @@
     <ProjectReference Include="..\BOOKS_WareHouse.Utility\BOOKS_WareHouse.Utility.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Identity\Data\" />
-  </ItemGroup>
-
 </Project>
