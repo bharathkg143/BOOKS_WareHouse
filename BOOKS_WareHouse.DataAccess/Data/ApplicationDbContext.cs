@@ -19,6 +19,7 @@ namespace BOOKS_WareHouse.DataAccess.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Company> Companies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -116,7 +117,35 @@ namespace BOOKS_WareHouse.DataAccess.Data
                     CategoryId = 1,
                     ImageUrl = ""
                 }
-               ); ;
+               );
+            modelBuilder.Entity<Company>().HasData(
+               new Company {
+                   Id = 1, 
+                   Name = "Oxford",
+                   StreetAddress="5th cross,Teacher colony" ,
+                   City="Bengaluru",
+                   PostalCode=560078,
+                   PhoneNumber = 7689465673
+               },
+               new Company
+               {
+                   Id = 2,
+                   Name = "Titan",
+                   StreetAddress = "Kuvempu Nagar",
+                   City = "Mysore",
+                   PostalCode = 567078,
+                   PhoneNumber = 7688675673
+               },
+               new Company
+               {
+                   Id = 3,
+                   Name = "Fiora",
+                   StreetAddress = "Jayanagar 4th Block",
+                   City = "Bengaluru",
+                   PostalCode = 567878,
+                   PhoneNumber = 7689065673
+               }
+               );
         }
     }
 }

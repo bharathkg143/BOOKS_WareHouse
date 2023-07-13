@@ -3,7 +3,6 @@ using BOOKS_WareHouse.DataAccess.Repository;
 using BOOKS_WareHouse.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using BOOKS_WareHouse.Utility;
 
@@ -41,8 +40,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
