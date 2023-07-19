@@ -21,7 +21,7 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> products = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
+            List<Product> products = _unitOfWork.Product.GetAll(null,includeProperties:"Category").ToList();
             return View(products);
         }
 

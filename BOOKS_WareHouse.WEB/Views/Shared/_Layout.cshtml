@@ -17,7 +17,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/images/title/book.png" height="50px" width="50px"/>
-                    BOOKS <i class="bi bi-book"></i> WareHouse
+                    BOOKS <i class="bi bi-book"></i> WAREHOUSE
                     </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -52,6 +52,12 @@
                                 </ul>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link " asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
+                                <h6><i class="bi bi-cart3"></i></h6>
+                            </a>
+                        </li>
+                        
                     </ul>
                     <partial name="_LoginPartial"/>
                 </div>

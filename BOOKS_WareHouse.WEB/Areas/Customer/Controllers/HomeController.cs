@@ -1,7 +1,9 @@
 ﻿using BOOKS_WareHouse.DataAccess.Repository.IRepository;
 using BOOKS_WareHouse.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BOOKS_WareHouse.WEB.Areas.Customer.Controllers
 {
@@ -25,8 +27,46 @@ namespace BOOKS_WareHouse.WEB.Areas.Customer.Controllers
 
         public IActionResult Details(int id)
         {
-            Product product = _unitOfWork.Product.Get(x => x.Id == id, includeProperties: "Category");
-            return View(product);
+            ShoppingCart shoppingCart = new()
+            {
+                Product = _unitOfWork.Product.Get(x => x.Id == id, includeProperties: "Category"),
+                Count = 1,
+                ProductId = id
+            };
+            return View(shoppingCart);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart cart)
+        {
+            //contains id of logged in user
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            cart.ApplicationUserId = userId;
+
+            //retrive from DB Is Product and User Id is Same
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(x=>x.ApplicationUserId==userId && x.ProductId == cart.ProductId);
+
+            if (cartFromDb != null)
+            {
+                cartFromDb.Count += cart.Count;
+                _unitOfWork.ShoppingCart.Update(cartFromDb);
+            }
+            else
+            {
+                if(cart.Id != 0)
+                {
+                    cart.Id = 0;
+                    TempData["Success"] = "Added to cart Successfully";
+                    _unitOfWork.ShoppingCart.Add(cart);
+                }
+               
+            }
+           
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()

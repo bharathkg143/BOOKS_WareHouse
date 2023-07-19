@@ -19,7 +19,7 @@
                 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-floating mb-2">
-                        <input asp-for="Input.Name" placeholder="User Name" class="form-control"/>
+                        <input asp-for="Input.Name" placeholder="User Name" class="form-control" />
                         <label asp-for="Input.Name"></label>
                         <span asp-validation-for="Input.Name" class="text-danger"></span>
                     </div>
@@ -68,6 +68,7 @@
                             <option disabled selected>--Select Roles--</option>
                         </select>
                     </div>
+
                     <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary shadow">Register</button>
                 </form>
             </div>
@@ -109,4 +110,18 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    @*<script>
+        $(document).ready(function(){
+            $('Input_Role').change(function(){
+                var selection=$('Input_Role Option:Selected').text();
+                if(selection == 'Company'){
+                    $('#Input_CompanyId').show();
+                }
+                else{
+                    $('#Input_CompanyId').hide();
+                }
+            })
+        })
+    </script>*@
 }
