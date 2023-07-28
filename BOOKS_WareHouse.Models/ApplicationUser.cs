@@ -21,9 +21,9 @@ namespace BOOKS_WareHouse.Models
         public string? PostalCode { get; set; }
 
         //Foreign Key Relation
-        //public int CompanyId { get; set; }
-        //[ForeignKey("CompanyId")]
-        //[ValidateNever]
-        //public Company Company { get; set; }
+        public int? CompanyId { get; set; }
+        [ForeignKey("CompanyId")]
+        [ValidateNever]
+        public Company Company { get; set; }
     }
 }

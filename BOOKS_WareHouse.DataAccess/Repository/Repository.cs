@@ -19,7 +19,7 @@ namespace BOOKS_WareHouse.DataAccess.Repository
             _context = context;
             this._dbSet = _context.Set<T>();//its like (_context.Categories)
             //because its a generic in type it should accept all model classes
-            _context.Products.Include(x => x.Category).Include(x=>x.CategoryId);
+            _context.Products.Include(x => x.Category).Include(x => x.CategoryId);
         }
         public void Add(T entity)
         {
@@ -59,7 +59,7 @@ namespace BOOKS_WareHouse.DataAccess.Repository
             }
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter,string? includeProperties =null)
+        public IEnumerable<T> GetAll(Expression<Func<T,bool>>? filter,string? includeProperties = null)
         {
             IQueryable<T> query = _dbSet;
             if (filter != null)
