@@ -115,19 +115,19 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
     <script>
-        $(document).ready(function () {
-            $('#Input_CompanyId').hide();
+        $(document).ready(function(){
+            $("#Input_CompanyId").hide();
 
-            $('#Input_Role').change(function () {
+            $("#Input_Role").change(function(){
                 var selectedRole = $(this).val();
 
-                if (selectedRole === 'Company') {
-                    
-                    $('#Input_CompanyId').show();
-                } else {
-                    
-                    $('#Input_CompanyId').hide();
+                if(selectedRole == "Company"){
+                    $("#Input_CompanyId").show();
+                }
+                else {
+                    $("#Input_CompanyId").hide();
                 }
             });
         });

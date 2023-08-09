@@ -14,6 +14,7 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
+
         public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
@@ -32,7 +33,6 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
                 {
                     Text = u.Name,
                     Value = u.Id.ToString()
-
                 });
 
             //Insert or Create
