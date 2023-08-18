@@ -20,6 +20,7 @@ namespace BOOKS_WareHouse.DataAccess.Repository
             this._dbSet = _context.Set<T>();//its like (_context.Categories)
             //because its a generic in type it should accept all model classes
             _context.Products.Include(x => x.Category).Include(x => x.CategoryId);
+            _context.OrderHeaders.Include(x => x.applicationUser);
         }
         public void Add(T entity)
         {

@@ -46,7 +46,7 @@ namespace BOOKS_WareHouse.DataAccess.Repository
             if (orderHeaderFromDB != null)
             {
                 orderHeaderFromDB.OrderStatus = orderStatus;
-                if (!string.IsNullOrEmpty(paymentStatus))
+                if (!string.IsNullOrEmpty(paymentStatus)) 
                 {
                     orderHeaderFromDB.PaymentStatus= paymentStatus;
                 }
