@@ -1,19 +1,82 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
 }
 
-<div class="card shadow border-0 mb-3">
-    <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2 class="text-light">Ordered List</h2>
+@{
+    var status = Context.Request.Query["status"];
+    var pending = "text-primary";
+    var inprocess = "text-primary";
+    var completed = "text-primary";
+    var approved = "text-primary";
+    var all = "text-primary";
+
+    switch (status)
+    {
+        case "pending":
+            pending = "active text-white bg-primary";
+            break;
+        case "inprocess":
+            inprocess = "active text-white bg-primary";
+            break;
+        case "completed":
+            completed = "active text-white bg-primary";
+            break;
+        case "approved":
+            approved = "active text-white bg-primary";
+            break;
+        default:
+            all = "active text-white bg-primary";
+            break;
+
+    }
+}
+
+<div class="mb-sm-5">
+    <div class="card shadow border-0 mb-3">
+        <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="text-light">Ordered List</h2>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="card-body p-4">
-        <table class="table table-bordered table-striped" id="tblData">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between pb-1 pt-2">
+                <span></span>
+                <div class="">
+                    <ul class="list-group list-group-horizontal border">
+                        <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="inprocess">
+                        <li class="list-group-item @inprocess border-0">In Process</li>
+                        </a>
+                        <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="pending">
+                        <li class="list-group-item @pending border-0">Payment Pending</li>
+                        </a>
+                        <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="completed">
+                        <li class="list-group-item @completed border-0">Completed</li>
+                        </a>
+                        <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="approved">
+                        <li class="list-group-item @approved border-0">Approved</li>
+                        </a>
+                        <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="all">
+                        <li class="list-group-item @all border-0">All</li>
+                        </a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-3 p-3">
+                <a class="btn btn-success" asp-area="Customer" asp-controller="Home" asp-action="Index">Back</a>
+            </div>
+            <div class="col-9 text-end p-3">
+                <label>Search:</label>
+                <input type="text" class="border-2" />
+            </div>
+        </div>
+        <table class="table table-bordered table-striped p-sm-4" id="tblData" style="border: 1px solid #333;">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -27,47 +90,68 @@
                 </tr>
             </thead>
             <tbody>
-                 
             </tbody>
         </table>
     </div>
 </div>
 
+
 <script type="text/javascript">
 
+    //JQuery
     $(document).ready(function () {
+        var url = window.location.search;
+
+        if (url.includes("inprocess")) {
+            loadDataTable("inprocess");
+        }
+        else if (url.includes("pending")) {
+            loadDataTable("pending");
+        }
+        else if (url.includes("completed")) {
+            loadDataTable("completed");
+        }
+        else if (url.includes("approved")) {
+            loadDataTable("approved");
+        }
+        else {
+            loadDataTable("all");
+        }
+    });
+
+
+    //JavaScript Functions
+    function loadDataTable(status) {
         $.ajax({
-            type:"GET",
-            url: "/admin/order/getall",
-            
-            success:function(response){
-                var data=response.data;
+            type: "GET",
+            url: "/admin/order/getall?status=" + status,
+            success: function (response) {
+                var data = response.data;
 
                 $('#tblData tbody').empty();
-                data.forEach(function(orderData){
-                    
-                    var row = 
-                    `<tr>
-                             <td>${orderData.id}</td>
-                             <td>${orderData.name}</td>
-                             <td>${orderData.phoneNumber}</td>
-                             <td></td>
-                             <td>${orderData.orderStatus}</td>
-                             <td>${orderData.orderTotal}</td>
-                                     <td><a class="btn btn-primary" href="admin/order/details?orderId=${orderData.id}"><i class="bi bi-pencil-square"></i></a></td>
-                    </tr>`;
+                data.forEach(function (orderData) {
+
+                    var row =
+                        `<tr>
+                                     <td>${orderData.id}</td>
+                                     <td>${orderData.name}</td>
+                                     <td>${orderData.phoneNumber}</td>
+                                     <td></td>
+                                     <td>${orderData.orderStatus}</td>
+                                     <td>${orderData.orderTotal}</td>
+                                     <td>
+                                        <a class="btn btn-primary" href="order/details?orderId=${orderData.id}"><i class="bi bi-pencil-square"></i></a>
+                                     </td>
+                            </tr>`;
 
                     $('#tblData tbody').append(row);
                 });
             },
             error: function (xhr, status, error) {
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
+                alert('error' + error);
             }
         });
-    });
-
+    }
 
 
 </script>

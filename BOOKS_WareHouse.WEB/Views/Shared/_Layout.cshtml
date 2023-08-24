@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,8 +14,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     @*<script src="https://code.jquery.com/jquery-3.7.0.min.js"
-            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-            crossorigin="anonymous">
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+    crossorigin="anonymous">
     </script>*@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -59,10 +62,11 @@
                         }
                         <li class="nav-item">
                             <a class="nav-link " asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
-                                <h6><i class="bi bi-cart3"></i></h6>
+                                <h6>
+                                    @await Component.InvokeAsync("ShoppingCart")
+                                </h6>
                             </a>
                         </li>
-
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

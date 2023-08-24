@@ -7,10 +7,12 @@ using Stripe;
 using System.Security.Claims;
 using System.Security.Policy;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BOOKS_WareHouse.WEB.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class ShoppingCartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -48,30 +50,37 @@ namespace BOOKS_WareHouse.WEB.Areas.Customer.Controllers
 
         public IActionResult Minus(int cartId)
         {
-            ShoppingCart shoppingCart = _unitOfWork.ShoppingCart.Get(x => x.Id == cartId);
+            ShoppingCart shoppingCart = _unitOfWork.ShoppingCart.Get(x => x.Id == cartId,tracked:true);
             if (shoppingCart.Count <= 1)
             {
-                _unitOfWork.ShoppingCart.Remove(shoppingCart);
-                _unitOfWork.Save();
+                HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.
+                    GetAll(x => x.ApplicationUserId == shoppingCart.ApplicationUserId).Count()-1);
+
+                _unitOfWork.ShoppingCart.Remove(shoppingCart);   
             }
             else
             {
                 shoppingCart.Count -= 1;
                 _unitOfWork.ShoppingCart.Update(shoppingCart);
-                _unitOfWork.Save();
-
             }
-
+            _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int cartId)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             ShoppingCart shoppingCart = _unitOfWork.ShoppingCart.Get(x => x.Id == cartId);
 
             _unitOfWork.ShoppingCart.Remove(shoppingCart);
             _unitOfWork.Save();
+
+            HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.
+                       GetAll(x => x.ApplicationUserId == userID).Count());
+            TempData["Success"] = "Cart updated succefully";
+
             return RedirectToAction(nameof(Index));
 
         }

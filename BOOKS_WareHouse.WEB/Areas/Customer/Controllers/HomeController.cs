@@ -1,5 +1,6 @@
 ﻿using BOOKS_WareHouse.DataAccess.Repository.IRepository;
 using BOOKS_WareHouse.Models;
+using BOOKS_WareHouse.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -53,19 +54,25 @@ namespace BOOKS_WareHouse.WEB.Areas.Customer.Controllers
             {
                 cartFromDb.Count += cart.Count;
                 _unitOfWork.ShoppingCart.Update(cartFromDb);
+                _unitOfWork.Save();
             }
             else
             {
+                //Adding cart record
                 if(cart.Id != 0)
                 {
                     cart.Id = 0;
-                    TempData["Success"] = "Added to cart Successfully";
                     _unitOfWork.ShoppingCart.Add(cart);
+                    _unitOfWork.Save();
+
+                    //Adding Count to Session
+                    HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.
+                        GetAll(x => x.ApplicationUserId == userId).Count());
+
+                    TempData["Success"] = "Added to cart Successfully";
                 }
                
             }
-           
-            _unitOfWork.Save();
             return RedirectToAction("Index");
         }
 
