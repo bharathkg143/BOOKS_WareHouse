@@ -13,11 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+//Adding DBContext to application
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//Adding Payment service
 builder.Services.Configure<StripeSttings>(builder.Configuration.GetSection("Stripe"));
 
+//Identity services
 builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options => {
@@ -35,6 +38,14 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+//Adding and Configuring Facebook Authentication
+builder.Services.AddAuthentication().AddFacebook(option =>
+{
+    option.AppId = "265628293078128";
+    option.AppSecret = "ccf6c63a85a24fadb2d5a8f373f2b05f";
+});
+
+//Depedency injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
@@ -49,8 +60,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
 StripeConfiguration.ApiKey=builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
 app.UseRouting();
 
 app.UseAuthentication();

@@ -7,14 +7,16 @@
     <input asp-for="OrderHeader.Id" hidden />
     <br />
     <div class="container mb-5">
-        <div class="card">
-            <div class="card-header bg-dark text-light ml-0">
+
+        <div class="d-flex justify-content-end mb-1">
+            <a class="btn btn-primary btn-sm w-25" asp-action="Index">Back to Orders</a>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header bg-secondary text-light ml-0">
                 <div class="container row">
-                    <div class="col-12 d-none d-md-block col-md-6 pb-1">
-                        <i class="fas fa-shopping-cart"></i> &nbsp; Order Summary
-                    </div>
-                    <div class="col-12 col-md-4 offset-md-2 text-right">
-                        <a class="btn btn-outline-info form-control btn-sm" asp-action="Index">Back to Orders</a>
+                    <div class="col-12 d-none d-md-block col-md-6 pb-1 text-center">
+                        <h4>Customer Order Summary</h4>
                     </div>
                 </div>
             </div>
@@ -132,7 +134,7 @@
                                     }
                                     else
                                     {
-                                        <input type="text" class="form-control" asp-for="OrderHeader.Carrier" Carrier" id="inpCarrier" readonly />
+                                        <input type="text" class="form-control" asp-for="OrderHeader.Carrier" id="inpCarrier" readonly />
                                     }
                                 </div>
                             </div>
@@ -181,7 +183,7 @@
                                 </div>
                             </div>
 
-                            @if(Model.OrderHeader.PaymentStatus != SD.PaymentStatusApproved)
+                            @if (Model.OrderHeader.PaymentStatus != SD.PaymentStatusApproved)
                             {
                                 <div class="row my-1" id="paymentDueDiv">
                                     <div class="col-3">Payment Due Date</div>
@@ -206,7 +208,7 @@
 
                             @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
                             {
-                                <input asp-action="UpdateOrderDetails" type="submit" class="btn btn-warning form-control my-1" value="Update Order Details" />
+                                <input asp-action="UpdateOrderDetails" type="submit" class="btn btn-warning form-control my-1 mt-3" value="Update Order Details" />
                             }
                         </div>
                         <div class="col-12 col-lg-5 offset-lg-1">
@@ -214,7 +216,7 @@
                                 <span class="text-primary">ORDER SUMMARY</span>
                             </h3>
                             <label class="btn btn-outline-primary form-control my-2 mt-1 bg-success">
-                                Order Status - @Model.OrderHeader.OrderStatus
+                                Order Status - @Model.OrderHeader.OrderStatus <i class="bi bi-check2-circle text-primary"></i>
                             </label>
 
                             <ul class="list-group mb-3">
@@ -289,7 +291,7 @@
                 alert("Carrier is empty, Please Enter value");
                 return false;
             }
-
+            
             if (TrackingNum == "") {
                 alert("Tracking Number is empty, Please Enter value");
                 return false;

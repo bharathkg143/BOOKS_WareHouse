@@ -209,6 +209,10 @@ namespace BOOKS_WareHouse.WEB.Areas.Customer.Controllers
                 _unitOfWork.Save();
             }
 
+            //Clearing Cart session after payment and order succefully confirm
+            HttpContext.Session.Remove(SD.SessionCart);
+            //HttpContext.Session.Clear();
+
             //To remove cart data after order success
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart
                 .GetAll(x => x.ApplicationUserId == orderHeader.ApplicationUserId).ToList();

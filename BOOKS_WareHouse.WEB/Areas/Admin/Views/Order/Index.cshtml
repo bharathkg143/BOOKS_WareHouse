@@ -45,21 +45,21 @@
             <div class="d-flex justify-content-between pb-1 pt-2">
                 <span></span>
                 <div class="">
-                    <ul class="list-group list-group-horizontal border">
+                    <ul class="list-group list-group-horizontal border fw-bold">
                         <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="inprocess">
-                        <li class="list-group-item @inprocess border-0">In Process</li>
+                            <li class="list-group-item @inprocess">In Process</li>
                         </a>
                         <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="pending">
-                        <li class="list-group-item @pending border-0">Payment Pending</li>
+                            <li class="list-group-item @pending">Payment Pending</li>
                         </a>
                         <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="completed">
-                        <li class="list-group-item @completed border-0">Completed</li>
+                        <li class="list-group-item @completed">Completed</li>
                         </a>
                         <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="approved">
-                        <li class="list-group-item @approved border-0">Approved</li>
+                        <li class="list-group-item @approved">Approved</li>
                         </a>
                         <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="all">
-                        <li class="list-group-item @all border-0">All</li>
+                        <li class="list-group-item @all">All</li>
                         </a>
                     </ul>
                 </div>
@@ -69,27 +69,27 @@
 
         <div class="row">
             <div class="col-3 p-3">
-                <a class="btn btn-success" asp-area="Customer" asp-controller="Home" asp-action="Index">Back</a>
+                <a class="btn btn-primary" asp-area="Customer" asp-controller="Home" asp-action="Index"><i class="bi bi-skip-backward-circle-fill"></i> Back</a>
             </div>
             <div class="col-9 text-end p-3">
-                <label>Search:</label>
-                <input type="text" class="border-2" />
+                <label class="fw-bold"><i class="bi bi-search"></i> Search:</label>
+                <input type="text" class="border-2" placeholder="search here" />
             </div>
         </div>
-        <table class="table table-bordered table-striped p-sm-4" id="tblData" style="border: 1px solid #333;">
+        <table class="table table-bordered table-striped p-sm-4" id="tblData">
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th></th>
-
+                <tr class="text-center table-dark">
+                    <th width="80px">ID <i class="bi bi-person-badge"></i></th>
+                    <th width="220px">Name <i class="bi bi-person-circle"></i></th>
+                    <th width="180px">Phone Number <i class="bi bi-telephone-fill"></i></th>
+                    <th width="280px">Email <i class="bi bi-envelope-paper-fill"></i></th>
+                    <th width="200px">Status <i class="bi bi-check2-circle"></i></th>
+                    <th width="150px">Total in <i class="bi bi-currency-rupee"></i></th>
+                    <th>Order Details <span class="bi bi-file-earmark-text"></span></th>
                 </tr>
             </thead>
             <tbody>
+                @*Diplaying data through API Call*@
             </tbody>
         </table>
     </div>
@@ -130,20 +130,18 @@
 
                 $('#tblData tbody').empty();
                 data.forEach(function (orderData) {
-
                     var row =
-                        `<tr>
-                                     <td>${orderData.id}</td>
-                                     <td>${orderData.name}</td>
-                                     <td>${orderData.phoneNumber}</td>
-                                     <td></td>
-                                     <td>${orderData.orderStatus}</td>
-                                     <td>${orderData.orderTotal}</td>
-                                     <td>
-                                        <a class="btn btn-primary" href="order/details?orderId=${orderData.id}"><i class="bi bi-pencil-square"></i></a>
-                                     </td>
+                        `<tr class="text-center">
+                                         <td>${orderData.id}</td>
+                                         <td>${orderData.name}</td>
+                                         <td>${orderData.phoneNumber}</td>
+                                         <td>${orderData.applicationUser.email}</td>
+                                         <td>${orderData.orderStatus}</td>
+                                         <td>${orderData.orderTotal}</td>
+                                         <td>
+                                            <a class="btn btn-primary" href="order/details?orderId=${orderData.id}"><i class="bi bi-pencil-square"></i></a>
+                                         </td>
                             </tr>`;
-
                     $('#tblData tbody').append(row);
                 });
             },
@@ -152,7 +150,6 @@
             }
         });
     }
-
 
 </script>
 

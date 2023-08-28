@@ -122,7 +122,6 @@ namespace BOOKS_WareHouse.WEB.Areas.Identity.Pages.Account
             public string? PhoneNumber { get; set; }
 
             public int? CompanyId { get; set; }
-
             [ValidateNever]
             public IEnumerable<SelectListItem> CompanyList { get; set; }
         }
@@ -184,10 +183,12 @@ namespace BOOKS_WareHouse.WEB.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    //If role not empty create based on selected role (we given Admin to select role and create)
                     if (!string.IsNullOrEmpty(Input.Role))
                     {
                        await _userManager.AddToRoleAsync(user, Input.Role);
                     }
+                    //Role empty then it is user account
                     else
                     {
                         await _userManager.AddToRoleAsync(user, SD.Role_Cust);
@@ -211,7 +212,16 @@ namespace BOOKS_WareHouse.WEB.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        //If user created Stay logged In
+                        if (User.IsInRole(SD.Role_Admin))
+                        {
+                            TempData["Success"] = "New user created Successfully";
+                        }
+                        //If not Login through a created account
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }

@@ -10,6 +10,8 @@ using System.Security.Claims;
 using System;
 using Stripe;
 using Stripe.Checkout;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
 {
@@ -20,10 +22,12 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
         private readonly IUnitOfWork _unitOfWork;
         [BindProperty]
         public OrderVM OrderVM { get; set; }
+        public ApplicationDbContext _db { get; }
 
-        public OrderController(IUnitOfWork unitOfWork)
+        public OrderController(IUnitOfWork unitOfWork, ApplicationDbContext db)
         {
             _unitOfWork = unitOfWork;
+            _db = db;
         }
         public IActionResult Index()
         {
@@ -192,23 +196,27 @@ namespace BOOKS_WareHouse.WEB.Areas.Admin.Controllers
             return View(orderHeaderId);
         }
 
+
         //API's calls
         #region API CALLS
         [HttpGet]
         public IActionResult GetAll(string status)
         {
+
             IEnumerable<OrderHeader> orderHeaders;
             
-            if(User.IsInRole(SD.Role_Admin)|| User.IsInRole(SD.Role_Employee))
+            if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
             {
-                orderHeaders= _unitOfWork.OrderHeader.GetAll(null, includeProperties: "applicationUser").ToList();
+                orderHeaders = _unitOfWork.OrderHeader.GetAll(null).ToList();
+                orderHeaders = _db.OrderHeaders.Include(x => x.applicationUser).ToList();
             }
             else
             {
                 var userIdentity = (ClaimsIdentity) User.Identity;
                 var userID= userIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                orderHeaders = _unitOfWork.OrderHeader.GetAll(x=>x.ApplicationUserId==userID, includeProperties: "applicationUser").ToList();
+                orderHeaders =_unitOfWork.OrderHeader.GetAll(x => x.ApplicationUserId == userID).ToList();
+                orderHeaders = _db.OrderHeaders.Include(x => x.applicationUser).Where(use => use.ApplicationUserId == userID).ToList();
             }
 
             switch (status)
