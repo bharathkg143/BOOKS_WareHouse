@@ -12,7 +12,7 @@
             <form id="account" method="post">
                 <h3 class="text-center">Use a local account to log in.</h3>
                 <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-floating mb-2">
                     <input asp-for="Input.Email" class="form-control text-dark" autocomplete="username" aria-required="true" />
                     <label asp-for="Input.Email" class="form-label"></label>

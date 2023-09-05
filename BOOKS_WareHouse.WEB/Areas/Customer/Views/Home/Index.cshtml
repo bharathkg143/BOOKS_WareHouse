@@ -1,10 +1,17 @@
 ﻿@model IEnumerable<Product>
 
 <div class="text-dark mt-0">
-    <h1 class="card-title text-dark"><i class="bi bi-journals"></i> BOOKS LIBRARY</h1>
-    <hr class="text-black"/>
+    <h2 class="card-title text-dark"><i class="bi bi-journals"></i> BOOKS LIBRARY</h2>
 </div>
-<div class="row pb-3 mb-3">
+<hr class="text-black" />
+<partial name="_BooksSlidsPartial" />
+<hr class="text-black" />
+
+<div class="text-dark mt-2">
+    <h4 class="card-title text-dark text-center">BOOKS ALL YOU NEED</h4> 
+</div>
+
+<div class="row pb-3 mb-3 mt-2">
     @foreach (var item in Model)
     {
         <div class="col-lg-3 col-sm-6">

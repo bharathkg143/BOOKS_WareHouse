@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using BOOKS_WareHouse.Utility;
 using Stripe;
+using BOOKS_WareHouse.DataAccess.DbInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,7 @@ builder.Services.AddAuthentication().AddFacebook(option =>
 });
 
 //Depedency injection
+builder.Services.AddScoped<IDbInitializer,DbInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
@@ -71,11 +73,21 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();
+seedDatabase();
 
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages();
-
 app.Run();
+
+//To create roles,migrations,user for the first time application runs.If these are not present
+void seedDatabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+       var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
